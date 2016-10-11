@@ -1,0 +1,27 @@
+<nav class="navbar navbar-dark bg-inverse navbar-full navbar-fixed-top">
+    <div class="nav navbar-nav">
+        <a id="navbar-brand" class="navbar-brand page-brand collapse in" href="#">MongoQueryBuilder</a>
+        <a data-toggle="collapse" class="navbar-brand" href="#navbar-brand,#page-sidebar">&#9776;</a>
+        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="#">Features</a>
+        <a class="nav-item nav-link" href="#">Admin</a>
+        <a class="nav-item nav-link" href="#">About</a>
+    </div>
+</nav>
+
+<div class="page-container">
+    <div class="page-sidebar-wraper">
+        <div id="page-sidebar" class="page-sidebar collapse in">
+            <ul class="page-sidebar-menu">
+                <li class="page-sidebar-heading active"><i class="fa fa-wrench" aria-hidden="true"></i>Tools</li>
+                <li class="page-sidebar-item"><i class="fa fa-search" aria-hidden="true"></i><a routerLink="/query-builder">Query builder</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-content-wraper">
+        <div class="page-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+

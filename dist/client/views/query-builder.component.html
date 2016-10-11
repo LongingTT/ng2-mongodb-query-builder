@@ -1,0 +1,157 @@
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon2" style="width:20%">Collection:</span>
+                    <div class="input-group-btn" style="width:80%">
+                        <button type="button" class="btn btn-secondary " style="width:100%"> {{selectedCollectionMetadata?selectedCollectionMetadata.displayName:"Please specify a collection"}}</button>
+                        <button type="button" class="btn btn-secondary  dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu " aria-labelledby="dropdownMenuButton" style="width:100%">
+                            <a *ngFor="let v_metadata of collectionMetadata" class="dropdown-item" (click)="onSelectCollection(v_metadata)">{{v_metadata.displayName}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <button type="button" class="btn btn-primary" (click)="queryData()">SEARCH</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-block" >
+        <div class="query-builder-container">
+            <div class="filter-container">
+                <div class="filter-column-group">
+                    <div class="filter-column filter-column-action"></div>
+                    <div class="filter-column filter-column-groupmark" [style.width]="maxGroupWidth+'px'"></div>
+                    <div class="filter-column filter-column-checkbox"></div>
+                    <div class="filter-column filter-column-andor"></div>
+                    <div class="filter-column filter-column-field"></div>
+                    <div class="filter-column filter-column-operator"></div>
+                    <div class="filter-column filter-column-value"></div>
+                </div>
+                <div class="filter-header-group">
+                    <div class="filter-row">
+                        <div class="filter-cell">ACTION</div>
+                        <div class="filter-cell"></div>
+                        <div class="filter-cell">
+                            <a (click)="createGroup()"><i class="fa fa-indent fa-1 filter-icon-color" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="filter-cell">LOGIC</div>
+                        <div class="filter-cell">FIELD</div>
+                        <div class="filter-cell">OPERATOR</div>
+                        <div class="filter-cell">VALUE</div>
+                    </div>
+                </div>
+                <div class="filter-row-group">
+                    <template ngFor let-v_clause [ngForOf]="clauses" let-i="index">
+                        <div class="filter-row" *ngIf="v_clause.clauseCategory==0">
+                            <div class="filter-cell">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary" (click)="insertFilterClause(i)"><i class="fa fa-plus fa-1 filter-icon-color" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-secondary" (click)="removeFilterClause(i)"><i class="fa fa-minus fa-1 filter-icon-color" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                            <div class="filter-cell">
+                                <div class="filter-group-mark-container">
+                                    <div *ngFor="let v_group of getParentGroups(i)" class="filter-group-mark filter-group-mark-color-{{v_group.groupLevel%4}}" [style.width]="v_group.groupMarkWidth+'px'" [style.height]="((v_clause.clauseId==v_group.groupMarkStartClauseId)?v_group.groupMarkHeight:35)+'px'">
+                                        <a *ngIf="v_clause.clauseId==v_group.groupMarkStartClauseId" (click)="removeGroup(v_group.clauseId)"> <i class="fa fa-outdent fa-1 filter-icon-color" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-cell">
+                                <input type="checkbox" #v_clauseCheckbox [ngModel]="v_clause.selected" (ngModelChange)="v_clause.selected = v_clauseCheckbox.checked; validateFilterGroup();">
+                            </div>
+                            <div class="filter-cell">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{clauseAndOr[v_clause.andOr]|uppercase}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" (click)="v_clause.andOr=clauseAndOr['and']">AND</a>
+                                        <a class="dropdown-item" (click)="v_clause.andOr=clauseAndOr['or']">OR</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-cell">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{v_clause.field?v_clause.field.displayName:'Field'}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a *ngFor="let v_fieldName of selectedCollectionFieldsNameArray" class="dropdown-item" (click)="v_clause.field=selectedCollectionMetadata.fields[v_fieldName];v_clause.filterOption=filterOptions[v_clause.field.type][0]">{{selectedCollectionMetadata.fields[v_fieldName].displayName}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-cell">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{v_clause.filterOption?v_clause.filterOption.displayName:'='}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a *ngIf="v_clause.field==null" >=</a>
+                                        <template [ngIf]="v_clause.field!=null">
+                                            <a *ngFor="let v_operator of filterOptions[v_clause.field.type]" class="dropdown-item" (click)="v_clause.filterOption=v_operator">{{v_operator.displayName}}</a>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-cell">
+                                <div class="filter-clause-value">
+                                    <input type="text" class="form-control form-control-sm" *ngIf="v_clause.filterOption==null">
+                                    <div *ngIf="v_clause.filterOption!=null" [ngSwitch]="v_clause.filterOption.inputType">
+                                        <div *ngSwitchCase="'string'"><input type="text" class="form-control form-control-sm" [(ngModel)]="v_clause.value" ></div>
+                                        <div *ngSwitchCase="'int'"><input type="number" class="form-control form-control-sm" [(ngModel)]="v_clause.value"></div>
+                                        <div *ngSwitchCase="'datetime'">
+                                            <input type="text" class="form-control form-control-sm bootstrap-datetimepicker" [(ngModel)]="v_clause.value">
+                                        </div>
+                                        <div *ngSwitchCase="'boolean'" class="dropdown">
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                True
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#">True</a>
+                                                <a class="dropdown-item" href="#">False</a>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <input type="text" class="form-control form-control-sm" id="inputDefault" *ngIf="v_clause.filterOption==null">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div class="filter-caption">
+                    <div class="append-clause">
+                        <button type="button" class="btn btn-secondary btn-sm btn-block" (click)="appendFilterClause()"><i class="fa fa-share" aria-hidden="true"></i>&nbsp;Click to append a new clause</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" class="btn btn-secondary" (click)="shownTabId='QueryResultGrid'"><i class="fa fa-table" aria-hidden="true"></i>&nbsp;Result (GRID)</button>
+            <button type="button" class="btn btn-secondary" (click)="shownTabId='QueryResultJson'"><i class="fa fa-code" aria-hidden="true"></i>&nbsp;Result (JSON)</button>
+            <button type="button" class="btn btn-secondary" (click)="shownTabId='MongoQueryJson'"><i class="fa fa-code" aria-hidden="true"></i>&nbsp;Mongo Query (JSON)</button>
+        </div>
+    </div>
+    <div class="card-block" [ngSwitch]="shownTabId">
+        <div *ngSwitchCase="'QueryResultGrid'">
+            <data-grid [dataObject]="queryResultObject"></data-grid>
+        </div>
+        <div *ngSwitchCase="'QueryResultJson'">
+            <google-code-prettify-json [jsonObject]="queryResultObject"></google-code-prettify-json>
+        </div>
+        <div *ngSwitchCase="'MongoQueryJson'">
+            <google-code-prettify-json  [jsonObject]="mongoQueryObject"></google-code-prettify-json>
+        </div>
+    </div>
+</div>
