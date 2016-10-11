@@ -1,0 +1,20 @@
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>title</th>
+      <th>category</th>
+      <th>language</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let v_item of dataObject" >
+      <th scope="row">1</th>
+      <td>{{v_item.title}}</td>
+      <td>{{v_item.category}}</td>
+      <td>{{v_item.language}}</td>
+    </tr>
+
+  </tbody>
+</table>

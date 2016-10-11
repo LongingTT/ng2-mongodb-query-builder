@@ -1,0 +1,222 @@
+
+.query-builder-container {
+    width: 100%;
+}
+
+.filter-container {
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+    /*max-width: 1000px;*/
+
+}
+
+.filter-container .dropdown-menu {
+    width: 100%;
+}
+
+.filter-column-group {
+    display: table-column-group;
+}
+
+.filter-column {
+    display: table-column;
+    height: 24px;
+}
+
+.filter-column-action {
+    width: 60px;
+    /*width:100px;*/
+}
+
+.filter-column-groupmark {
+    width: 20px;
+}
+
+.filter-column-checkbox {
+    width: 20px;
+}
+
+.filter-column-andor {
+    width: 70px;
+}
+
+.filter-column-field {
+    /*width:100px;*/
+    width: 16%;
+    
+}
+
+.filter-column-operator {
+    /*width: 100px;*/
+    width: 16%;
+
+}
+
+.filter-column-value {
+    /*width: 200px;*/
+    width: 33%;
+    
+}
+
+.filter-header-group {
+    display: table-header-group;
+    color: #808080;
+    font-size: 0.8rem;
+}
+.filter-header-group .filter-icon-color
+{
+font-size: 1rem;
+
+}
+.filter-header-group .filter-icon-color:hover{
+color: black;
+
+}
+.filter-row-group {
+    display: table-row-group;
+}
+
+.filter-caption {
+display: table-caption;
+caption-side: bottom;
+
+}
+
+.filter-row {
+    display: table-row;
+    height: 35px; /*flexible, the height based on clause group, height=30+increce*/
+    box-sizing: border-box;
+}
+
+.filter-row:hover {
+    /*background-color:grey;*/
+}
+
+.filter-cell {
+    display: table-cell;
+    /* padding: 0px 0px 0px 4px;*/
+    padding: 0;
+    position: relative;;
+}
+
+
+.filter-cell .dropdown .btn{
+    text-align: left;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filter-cell .dropdown-menu{
+    width: 100%;
+    min-width: 0;
+    overflow: auto;
+    overflow-y: hidden;
+}
+
+
+.filter-cell .dropdown-toggle::after{
+float: right;
+margin-top: 0.5em;
+margin-left: -200%;
+
+}
+.grid-container {
+}
+
+.filter-group-mark-container {
+    position: absolute;
+    width: 100%;
+    /*height: 23px;*/ /*flexible, the height based on clause group, height = max( gourp mark height )*/
+    box-sizing: border-box;
+    bottom: 0;
+  /*     display: inline-block;
+ vertical-align: bottom;*/
+}
+
+.filter-group-mark {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    box-sizing: border-box;
+    padding: 1px;
+}
+
+.filter-icon-color {
+    color: #808080;
+}
+
+.filter-group-mark-color-1 {
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.filter-group-mark-color-2 {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.filter-group-mark-color-3 {
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.filter-group-mark-color-0 {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.filter-group-mark-start {
+    border-bottom: 0;
+    border-top: 1px;
+}
+
+.filter-group-mark-end {
+    top: -35px;
+    bottom: auto;
+    border-top: 0;
+    border-bottom: 1px;
+}
+
+.filter-clause-value{
+
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.filter-dropdown {
+    width: 100%;
+    text-align: left;
+    /*border-radius: 0 0;*/
+}
+
+.filter-dropdown-toggle {
+    float: right;
+    margin-top: -30px;
+    z-index: 999;
+    /*box-shadow: none;*/
+    /*border-radius: 0 0;*/
+}
+/*.filter-caption .append-clause{
+background-color: grey;
+
+}*/
+
+
+

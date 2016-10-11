@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "es5"
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ],
+  "files": [ 
+    "./src/client/scripts/main.ts",
+    "./src/client/scripts/app.module.ts",
+    "./src/client/scripts/layout.component.ts",
+    "./src/client/scripts/rxjs-operators.ts",
+    "./src/client/scripts/query-data.service.ts",
+    "./src/client/scripts/query-builder.component.ts",
+    "./src/client/scripts/google-code-prettify-json.component.ts",
+    "./src/client/scripts/data-grid.component.ts",
+    "./src/client/scripts/app.routing.ts"
+  ],
+  "compileOnSave": true
+}

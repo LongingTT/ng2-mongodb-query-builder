@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/7de6c3dd94feaeb21f20054b9f30d5dabc5efabd/bootstrap.v3.datetimepicker/bootstrap.v3.datetimepicker-3.0.0.d.ts",
+    "raw": "registry:dt/bootstrap.v3.datetimepicker#3.0.0+20160317120654",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/7de6c3dd94feaeb21f20054b9f30d5dabc5efabd/bootstrap.v3.datetimepicker/bootstrap.v3.datetimepicker-3.0.0.d.ts"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "globalDependencies": {
+    "bootstrap.v3.datetimepicker": "registry:dt/bootstrap.v3.datetimepicker#3.0.0+20160317120654",
+    "core-js": "registry:dt/core-js#0.0.0+20160725163759",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "jquery": "registry:dt/jquery#1.10.0+20160929162922",
+    "moment": "registry:dt/moment#2.11.1+20160829143156",
+    "node": "registry:dt/node#6.0.0+20160831021119"
+  },
+  "dependencies": {
+    "chart.js": "registry:npm/chart.js#2.1.4+20160615174920"
+  }
+}
