@@ -1,5 +1,5 @@
 /**
- * @license Angular v3.0.1
+ * @license Angular v3.0.2
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -2382,6 +2382,16 @@
             this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
         }
         /**
+         * @internal
+         * TODO: this should be removed once the constructor of the router made internal
+         */
+        Router.prototype.resetRootComponentType = function (rootComponentType) {
+            this.rootComponentType = rootComponentType;
+            // TODO: vsavkin router 4.0 should make the root component set to null
+            // this will simplify the lifecycle of the router.
+            this.currentRouterState.root.component = this.rootComponentType;
+        };
+        /**
          * Sets up the location change listener and performs the initial navigation.
          */
         Router.prototype.initialNavigation = function () {
@@ -3338,15 +3348,18 @@
             var _this = this;
             if (!this.links || !this.linksWithHrefs || !this.router.navigated)
                 return;
-            var isActiveLinks = this.reduceList(this.links);
-            var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
-            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
+            var isActive = this.hasActiveLink();
+            this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActive); });
         };
-        RouterLinkActive.prototype.reduceList = function (q) {
+        RouterLinkActive.prototype.isLinkActive = function (router) {
             var _this = this;
-            return q.reduce(function (res, link) {
-                return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
-            }, false);
+            return function (link) {
+                return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+            };
+        };
+        RouterLinkActive.prototype.hasActiveLink = function () {
+            return this.links.some(this.isLinkActive(this.router)) ||
+                this.linksWithHrefs.some(this.isLinkActive(this.router));
         };
         RouterLinkActive.decorators = [
             { type: _angular_core.Directive, args: [{ selector: '[routerLinkActive]' },] },

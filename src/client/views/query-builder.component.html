@@ -106,7 +106,9 @@
                                         <div *ngSwitchCase="'string'"><input type="text" class="form-control form-control-sm" [(ngModel)]="v_clause.value" ></div>
                                         <div *ngSwitchCase="'int'"><input type="number" class="form-control form-control-sm" [(ngModel)]="v_clause.value"></div>
                                         <div *ngSwitchCase="'datetime'">
-                                            <input type="text" class="form-control form-control-sm bootstrap-datetimepicker" [(ngModel)]="v_clause.value">
+                                         <!--    <input type="text" class="form-control form-control-sm bootstrap-datetimepicker" [(ngModel)]="v_clause.value"> -->
+                                           <!--  <datetime-picker (onDatetimePicked)="onDatetimePicked($event)"></datetime-picker> -->
+                                        <datetime-picker (onDatetimePicked)="onDatetimePicked($event,v_clause)"></datetime-picker>
                                         </div>
                                         <div *ngSwitchCase="'boolean'" class="dropdown">
                                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

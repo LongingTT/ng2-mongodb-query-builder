@@ -1,6 +1,6 @@
 {
-  "name": "longing",
-  "version": "0.1.0",
+  "name": "ng2-mongodb-query-builder",
+  "version": "0.0.1",
   "description": "parctice for mongodb",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "mongodb",
     "test"
   ],
-  "author": "ng2-mongodb-query-builder",
+  "author": "Longting Li",
   "license": "ISC",
   "dependencies": {
     "@angular/common": "~2.0.1",
@@ -25,6 +25,7 @@
     "bootstrap": "^4.0.0-alpha.4",
     "color-themes-for-google-code-prettify": "^2.0.4",
     "core-js": "^2.4.1",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.43",
     "express": "^4.14.0",
     "font-awesome": "^4.6.3",
     "google-code-prettify": "^1.0.5",

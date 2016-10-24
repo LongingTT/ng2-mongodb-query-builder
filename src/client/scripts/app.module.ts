@@ -9,6 +9,7 @@ import {LayoutComponent} from './layout.component';
 import {GoogleCodePrettifyForJsonComponent} from './google-code-prettify-json.component';
 import {DataGridComponent} from './data-grid.component';
 
+import {DatetimePickerComponent} from './datetime-picker.component'
 // Add the RxJS Observable operators we need in this app
 import './rxjs-operators';
 
@@ -23,7 +24,8 @@ import './rxjs-operators';
 	LayoutComponent,
 	QueryBuilderComponent,
 	GoogleCodePrettifyForJsonComponent,
-	DataGridComponent
+	DataGridComponent,
+	DatetimePickerComponent
 	],
 	providers:[
 	appRoutingProviders

@@ -60,7 +60,7 @@ var errorHandler = function(err, req, res, next) {
 // create express service
 var app=express();
 // create application/json parser 
-app.use(bodyParser.json());
+app.use(bodyParser.json({reviver:isoDateReviver}));
 
 app.use('/scripts', express.static(__dirname+'/../client/scripts'));
 app.use('/css', express.static(__dirname+'/../client/css'));
@@ -84,5 +84,15 @@ app.use(errorHandler);
 app.listen(3000,function(){console.log('Example app listening on port 3000')}); 
 
 
-
+function isoDateReviver(key, value) {
+    var regexIsoDate;
+    if (typeof value === 'string') {
+        regexIsoDate = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+        if (regexIsoDate) {
+            return new Date(Date.UTC(+regexIsoDate[1], +regexIsoDate[2] - 1, +regexIsoDate[3], +regexIsoDate[4],
+                            +regexIsoDate[5], +regexIsoDate[6]));
+        }
+    }
+    return value;
+};
 

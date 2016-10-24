@@ -1,3 +1,4 @@
+
 import { Component,ElementRef,OnInit,Input } from "@angular/core";
 import { NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 
@@ -35,7 +36,8 @@ export class QueryBuilderComponent {
     public mongoQueryObject:any;
     public queryResultObject:any;
 
-    public shownTabId:string="MongoQueryJson";
+    //public shownTabId:string="MongoQueryJson";
+    public shownTabId:string="QueryResultJson";
    
     constructor(private queryDataService:QueryDataService,private el:ElementRef) {
         this._clauseId = 0;
@@ -47,6 +49,12 @@ export class QueryBuilderComponent {
     ngOnInit(){
         this.getCollectionMetadata();
     }
+
+onDatetimePicked(datetime:any,clause:FilterClause){//moment object
+    clause.value=datetime.toISOString();
+console.log(datetime.toISOString());
+
+}
 
     getCollectionMetadata(){
         console.debug("getCollectionMetadata running");
@@ -113,8 +121,9 @@ export class QueryBuilderComponent {
         ],
         // TODO: NOT SUPPORT DATETIME
         'datetime': [
-        { displayName: '<', stringFormat: "XXX", inputType: 'datetime', },
-        { displayName: '>', stringFormat: "XXX", inputType: 'datetime', },
+        { displayName: '=', stringFormat: '{"{0}":{"$eq":"{1}"}}', inputType: 'datetime', },
+        { displayName: '<', stringFormat: '{"{0}":{"$lt":"{1}"}}', inputType: 'datetime', },
+        { displayName: '>', stringFormat: '{"{0}":{"$gt":"{1}"}}', inputType: 'datetime', },
         { displayName: 'year equals', stringFormat: 'XXX', inputType: 'int' },
         { displayName: 'month number equals', stringFormat: 'XXX', inputType: 'int' },
         { displayName: 'day number equals', stringFormat: 'XXX', inputType: 'int' },

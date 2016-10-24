@@ -31,7 +31,8 @@ var QueryBuilderComponent = (function () {
         this.groupValidationResult = false;
         // Configuration
         this.collectionID = '';
-        this.shownTabId = "MongoQueryJson";
+        //public shownTabId:string="MongoQueryJson";
+        this.shownTabId = "QueryResultJson";
         this.filterOptions = {
             'string': [
                 { displayName: "=", stringFormat: '{"{0}":{"$eq":"{1}"}}', inputType: "string" },
@@ -52,8 +53,9 @@ var QueryBuilderComponent = (function () {
             ],
             // TODO: NOT SUPPORT DATETIME
             'datetime': [
-                { displayName: '<', stringFormat: "XXX", inputType: 'datetime', },
-                { displayName: '>', stringFormat: "XXX", inputType: 'datetime', },
+                { displayName: '=', stringFormat: '{"{0}":{"$eq":"{1}"}}', inputType: 'datetime', },
+                { displayName: '<', stringFormat: '{"{0}":{"$lt":"{1}"}}', inputType: 'datetime', },
+                { displayName: '>', stringFormat: '{"{0}":{"$gt":"{1}"}}', inputType: 'datetime', },
                 { displayName: 'year equals', stringFormat: 'XXX', inputType: 'int' },
                 { displayName: 'month number equals', stringFormat: 'XXX', inputType: 'int' },
                 { displayName: 'day number equals', stringFormat: 'XXX', inputType: 'int' },
@@ -98,6 +100,10 @@ var QueryBuilderComponent = (function () {
     }
     QueryBuilderComponent.prototype.ngOnInit = function () {
         this.getCollectionMetadata();
+    };
+    QueryBuilderComponent.prototype.onDatetimePicked = function (datetime, clause) {
+        clause.value = datetime.toISOString();
+        console.log(datetime.toISOString());
     };
     QueryBuilderComponent.prototype.getCollectionMetadata = function () {
         var _this = this;

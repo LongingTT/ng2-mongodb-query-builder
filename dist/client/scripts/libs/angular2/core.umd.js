@@ -1,5 +1,5 @@
 /**
- * @license Angular v2.0.1
+ * @license Angular v2.0.2
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -36,12 +36,8 @@
     // exports the original value of the symbol.
     var global$1 = globalScope;
     function getTypeNameForDebugging(type) {
-        if (type['name']) {
-            return type['name'];
-        }
-        return typeof type;
+        return type['name'] || typeof type;
     }
-    var Math = global$1.Math;
     // TODO: remove calls to assert in production environment
     // Note: Can't just export this and import in in other files
     // as `assert` is a reserved keyword in Dart
@@ -78,7 +74,7 @@
         }
         var res = token.toString();
         var newLineIndex = res.indexOf('\n');
-        return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
+        return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
     }
     var StringWrapper = (function () {
         function StringWrapper() {
@@ -806,13 +802,6 @@
          */
         ChangeDetectorStatus[ChangeDetectorStatus["Destroyed"] = 5] = "Destroyed";
     })(ChangeDetectorStatus || (ChangeDetectorStatus = {}));
-    /**
-     * List of possible {@link ChangeDetectionStrategy} values.
-     */
-    var CHANGE_DETECTION_STRATEGY_VALUES = [
-        exports.ChangeDetectionStrategy.OnPush,
-        exports.ChangeDetectionStrategy.Default,
-    ];
     function isDefaultChangeDetectionStrategy(changeDetectionStrategy) {
         return isBlank(changeDetectionStrategy) ||
             changeDetectionStrategy === exports.ChangeDetectionStrategy.Default;
@@ -1073,7 +1062,7 @@
 
     /**
      * Defines a schema that will allow:
-     * - any non-angular elements with a `-` in their name,
+     * - any non-Angular elements with a `-` in their name,
      * - any properties on elements with a `-` in their name which is the common rule for custom
      * elements.
      *
@@ -1091,7 +1080,7 @@
         name: 'no-errors-schema'
     };
     /**
-     * NgModule decorator and metadata
+     * NgModule decorator and metadata.
      *
      * @stable
      * @Annotation
@@ -1143,7 +1132,6 @@
          */
         ViewEncapsulation[ViewEncapsulation["None"] = 2] = "None";
     })(exports.ViewEncapsulation || (exports.ViewEncapsulation = {}));
-    var VIEW_ENCAPSULATION_VALUES = [exports.ViewEncapsulation.Emulated, exports.ViewEncapsulation.Native, exports.ViewEncapsulation.None];
     /**
      * Metadata properties available for configuring Views.
      *
@@ -1421,26 +1409,6 @@
     var StringMapWrapper = (function () {
         function StringMapWrapper() {
         }
-        StringMapWrapper.get = function (map, key) {
-            return map.hasOwnProperty(key) ? map[key] : undefined;
-        };
-        StringMapWrapper.set = function (map, key, value) { map[key] = value; };
-        StringMapWrapper.keys = function (map) { return Object.keys(map); };
-        StringMapWrapper.values = function (map) {
-            return Object.keys(map).map(function (k) { return map[k]; });
-        };
-        StringMapWrapper.isEmpty = function (map) {
-            for (var prop in map) {
-                return false;
-            }
-            return true;
-        };
-        StringMapWrapper.forEach = function (map, callback) {
-            for (var _i = 0, _a = Object.keys(map); _i < _a.length; _i++) {
-                var k = _a[_i];
-                callback(map[k], k);
-            }
-        };
         StringMapWrapper.merge = function (m1, m2) {
             var m = {};
             for (var _i = 0, _a = Object.keys(m1); _i < _a.length; _i++) {
@@ -1634,33 +1602,6 @@
             }
         }
     }
-    // Safari and Internet Explorer do not support the iterable parameter to the
-    // Set constructor.  We work around that by manually adding the items.
-    var createSetFromList = (function () {
-        var test = new Set([1, 2, 3]);
-        if (test.size === 3) {
-            return function createSetFromList(lst) { return new Set(lst); };
-        }
-        else {
-            return function createSetAndPopulateFromList(lst) {
-                var res = new Set(lst);
-                if (res.size !== lst.length) {
-                    for (var i = 0; i < lst.length; i++) {
-                        res.add(lst[i]);
-                    }
-                }
-                return res;
-            };
-        }
-    })();
-    var SetWrapper = (function () {
-        function SetWrapper() {
-        }
-        SetWrapper.createFromList = function (lst) { return createSetFromList(lst); };
-        SetWrapper.has = function (s, key) { return s.has(key); };
-        SetWrapper.delete = function (m, k) { m.delete(k); };
-        return SetWrapper;
-    }());
 
     /**
      * @license
@@ -1873,7 +1814,7 @@
             var signature = [];
             for (var i = 0, ii = params.length; i < ii; i++) {
                 var parameter = params[i];
-                if (isBlank(parameter) || parameter.length == 0) {
+                if (!parameter || parameter.length == 0) {
                     signature.push('?');
                 }
                 else {
@@ -1953,7 +1894,7 @@
         function ReflectiveKey(token, id) {
             this.token = token;
             this.id = id;
-            if (isBlank(token)) {
+            if (!token) {
                 throw new Error('Token must be defined!');
             }
         }
@@ -2255,7 +2196,7 @@
                 throw new Error('Usage tracking is disabled');
             }
             var allTypes = MapWrapper.keys(this._injectableInfo);
-            return allTypes.filter(function (key) { return !SetWrapper.has(_this._usedKeys, key); });
+            return allTypes.filter(function (key) { return !_this._usedKeys.has(key); });
         };
         Reflector.prototype.registerFunction = function (func, funcInfo) {
             this._injectableInfo.set(func, funcInfo);
@@ -2363,7 +2304,7 @@
         return Reflector;
     }(ReflectorReader));
     function _mergeMaps(target, config) {
-        StringMapWrapper.forEach(config, function (v, k) { return target.set(k, v); });
+        Object.keys(config).forEach(function (k) { target.set(k, config[k]); });
     }
 
     /**
@@ -2518,7 +2459,7 @@
         return res;
     }
     function constructDependencies(typeOrFunc, dependencies) {
-        if (isBlank(dependencies)) {
+        if (!dependencies) {
             return _dependenciesFor(typeOrFunc);
         }
         else {
@@ -2528,7 +2469,7 @@
     }
     function _dependenciesFor(typeOrFunc) {
         var params = reflector.parameters(typeOrFunc);
-        if (isBlank(params))
+        if (!params)
             return [];
         if (params.some(isBlank)) {
             throw new NoAnnotationError(typeOrFunc, params);
@@ -3388,18 +3329,19 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
-     * Provides a hook for centralized exception handling.
+     * @whatItDoes Provides a hook for centralized exception handling.
      *
-     * The default implementation of `ErrorHandler` prints error messages to the `Console`. To
-     * intercept error handling,
-     * write a custom exception handler that replaces this default as appropriate for your app.
+     * @description
+     *
+     * The default implementation of `ErrorHandler` prints error messages to the `console`. To
+     * intercept error handling, write a custom exception handler that replaces this default as
+     * appropriate for your app.
      *
      * ### Example
      *
-     * ```javascript
-     *
+     * ```
      * class MyErrorHandler implements ErrorHandler {
-     *   call(error, stackTrace = null, reason = null) {
+     *   handleError(error) {
      *     // do something with the exception
      *   }
      * }
@@ -3409,6 +3351,7 @@
      * })
      * class MyModule {}
      * ```
+     *
      * @stable
      */
     var ErrorHandler = (function () {
@@ -3451,9 +3394,7 @@
                 return error.context ? error.context :
                     this._findContext(error.originalError);
             }
-            else {
-                return null;
-            }
+            return null;
         };
         /** @internal */
         ErrorHandler.prototype._findOriginalError = function (error) {
@@ -4376,7 +4317,7 @@
             if (afterIndex === void 0) { afterIndex = null; }
             var key = getMapKey(trackById);
             var recordList = this.map.get(key);
-            return isBlank(recordList) ? null : recordList.get(trackById, afterIndex);
+            return recordList ? recordList.get(trackById, afterIndex) : null;
         };
         /**
          * Removes a {@link CollectionChangeRecord} from the list of duplicates.
@@ -4675,7 +4616,7 @@
                 obj.forEach(fn);
             }
             else {
-                StringMapWrapper.forEach(obj, fn);
+                Object.keys(obj).forEach(function (k) { return fn(obj[k], k); });
             }
         };
         return DefaultKeyValueDiffer;
@@ -4751,7 +4692,7 @@
             return {
                 provide: IterableDiffers,
                 useFactory: function (parent) {
-                    if (isBlank(parent)) {
+                    if (!parent) {
                         // Typically would occur when calling IterableDiffers.extend inside of dependencies passed
                         // to
                         // bootstrap(), which would override default pipes instead of extending them.
@@ -4816,7 +4757,7 @@
             return {
                 provide: KeyValueDiffers,
                 useFactory: function (parent) {
-                    if (isBlank(parent)) {
+                    if (!parent) {
                         // Typically would occur when calling KeyValueDiffers.extend inside of dependencies passed
                         // to
                         // bootstrap(), which would override default pipes instead of extending them.
@@ -5489,13 +5430,10 @@
      * ```typescript
      * @Component({
      *   selector: 'parent',
-     *   template: `
-     *     <child [prop]="parentProp"></child>
-     *   `,
-     *   directives: [forwardRef(() => Child)]
+     *   template: '<child [prop]="parentProp"></child>',
      * })
      * class Parent {
-     *   parentProp = "init";
+     *   parentProp = 'init';
      * }
      *
      * @Directive({selector: 'child', inputs: ['prop']})
@@ -5505,7 +5443,7 @@
      *   set prop(v) {
      *     // this updates the parent property, which is disallowed during change detection
      *     // this will result in ExpressionChangedAfterItHasBeenCheckedError
-     *     this.parent.parentProp = "updated";
+     *     this.parent.parentProp = 'updated';
      *   }
      * }
      * ```
@@ -5608,7 +5546,7 @@
     var EMPTY_ARR = [];
     function ensureSlotCount(projectableNodes, expectedSlotCount) {
         var res;
-        if (isBlank(projectableNodes)) {
+        if (!projectableNodes) {
             res = EMPTY_ARR;
         }
         else if (projectableNodes.length < expectedSlotCount) {
@@ -5999,7 +5937,7 @@
             if (projectableNodes === void 0) { projectableNodes = null; }
             if (rootSelectorOrNode === void 0) { rootSelectorOrNode = null; }
             var vu = injector.get(ViewUtils);
-            if (isBlank(projectableNodes)) {
+            if (!projectableNodes) {
                 projectableNodes = [];
             }
             // Note: Host views don't need a declarationAppElement!
@@ -6282,7 +6220,6 @@
      *     <button (click)="processWithinAngularZone()">Process within Angular zone</button>
      *     <button (click)="processOutsideOfAngularZone()">Process outside of Angular zone</button>
      *   `,
-     *   directives: [NgIf]
      * })
      * export class NgZoneDemo {
      *   progress: number = 0;
@@ -8021,22 +7958,6 @@
     }());
 
     /**
-     * @license
-     * Copyright Google Inc. All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    var AnimationOutput = (function () {
-        function AnimationOutput(name, phase, fullPropertyName) {
-            this.name = name;
-            this.phase = phase;
-            this.fullPropertyName = fullPropertyName;
-        }
-        return AnimationOutput;
-    }());
-
-    /**
      * @experimental Animation support is experimental.
      */
     var AnimationPlayer = (function () {
@@ -8824,10 +8745,11 @@
     function prepareFinalAnimationStyles(previousStyles, newStyles, nullValue) {
         if (nullValue === void 0) { nullValue = null; }
         var finalStyles = {};
-        StringMapWrapper.forEach(newStyles, function (value, prop) {
+        Object.keys(newStyles).forEach(function (prop) {
+            var value = newStyles[prop];
             finalStyles[prop] = value == AUTO_STYLE ? nullValue : value.toString();
         });
-        StringMapWrapper.forEach(previousStyles, function (value, prop) {
+        Object.keys(previousStyles).forEach(function (prop) {
             if (!isPresent(finalStyles[prop])) {
                 finalStyles[prop] = nullValue;
             }
@@ -8841,7 +8763,8 @@
         var flatenedFirstKeyframeStyles = flattenStyles(firstKeyframe.styles.styles);
         var extraFirstKeyframeStyles = {};
         var hasExtraFirstStyles = false;
-        StringMapWrapper.forEach(collectedStyles, function (value, prop) {
+        Object.keys(collectedStyles).forEach(function (prop) {
+            var value = collectedStyles[prop];
             // if the style is already defined in the first keyframe then
             // we do not replace it.
             if (!flatenedFirstKeyframeStyles[prop]) {
@@ -8857,7 +8780,7 @@
         var flatenedFinalKeyframeStyles = flattenStyles(finalKeyframe.styles.styles);
         var extraFinalKeyframeStyles = {};
         var hasExtraFinalStyles = false;
-        StringMapWrapper.forEach(keyframeCollectedStyles, function (value, prop) {
+        Object.keys(keyframeCollectedStyles).forEach(function (prop) {
             if (!isPresent(flatenedFinalKeyframeStyles[prop])) {
                 extraFinalKeyframeStyles[prop] = AUTO_STYLE;
                 hasExtraFinalStyles = true;
@@ -8866,7 +8789,7 @@
         if (hasExtraFinalStyles) {
             finalKeyframe.styles.styles.push(extraFinalKeyframeStyles);
         }
-        StringMapWrapper.forEach(flatenedFinalKeyframeStyles, function (value, prop) {
+        Object.keys(flatenedFinalKeyframeStyles).forEach(function (prop) {
             if (!isPresent(flatenedFirstKeyframeStyles[prop])) {
                 extraFirstKeyframeStyles[prop] = AUTO_STYLE;
                 hasExtraFirstStyles = true;
@@ -8879,13 +8802,14 @@
     }
     function clearStyles(styles) {
         var finalStyles = {};
-        StringMapWrapper.keys(styles).forEach(function (key) { finalStyles[key] = null; });
+        Object.keys(styles).forEach(function (key) { finalStyles[key] = null; });
         return finalStyles;
     }
     function collectAndResolveStyles(collection, styles) {
         return styles.map(function (entry) {
             var stylesObj = {};
-            StringMapWrapper.forEach(entry, function (value, prop) {
+            Object.keys(entry).forEach(function (prop) {
+                var value = entry[prop];
                 if (value == FILL_STYLE_FLAG) {
                     value = collection[prop];
                     if (!isPresent(value)) {
@@ -8899,12 +8823,12 @@
         });
     }
     function renderStyles(element, renderer, styles) {
-        StringMapWrapper.forEach(styles, function (value, prop) { renderer.setElementStyle(element, prop, value); });
+        Object.keys(styles).forEach(function (prop) { renderer.setElementStyle(element, prop, styles[prop]); });
     }
     function flattenStyles(styles) {
         var finalStyles = {};
         styles.forEach(function (entry) {
-            StringMapWrapper.forEach(entry, function (value, prop) { finalStyles[prop] = value; });
+            Object.keys(entry).forEach(function (prop) { finalStyles[prop] = entry[prop]; });
         });
         return finalStyles;
     }
@@ -9137,7 +9061,8 @@
                 var staticNodeInfo = this._staticNodeInfo;
                 if (isPresent(staticNodeInfo)) {
                     var refs = staticNodeInfo.refTokens;
-                    StringMapWrapper.forEach(refs, function (refToken, refName) {
+                    Object.keys(refs).forEach(function (refName) {
+                        var refToken = refs[refName];
                         var varValue;
                         if (isBlank(refToken)) {
                             varValue = _this._view.allNodes ? _this._view.allNodes[_this._nodeIndex] : null;
@@ -9222,7 +9147,7 @@
         };
         ViewAnimationMap.prototype.findAllPlayersByElement = function (element) {
             var el = this._map.get(element);
-            return el ? StringMapWrapper.values(el) : [];
+            return el ? Object.keys(el).map(function (k) { return el[k]; }) : [];
         };
         ViewAnimationMap.prototype.set = function (element, animationName, player) {
             var playersByAnimation = this._map.get(element);
@@ -9245,7 +9170,7 @@
                 delete playersByAnimation[animationName];
                 var index = this._allPlayers.indexOf(player);
                 this._allPlayers.splice(index, 1);
-                if (StringMapWrapper.isEmpty(playersByAnimation)) {
+                if (Object.keys(playersByAnimation).length === 0) {
                     this._map.delete(element);
                 }
             }
@@ -9363,20 +9288,19 @@
                     var listener = listeners[i];
                     // we check for both the name in addition to the phase in the event
                     // that there may be more than one @trigger on the same element
-                    if (listener.output.name == animationName && listener.output.phase == phase) {
+                    if (listener.eventName === animationName && listener.eventPhase === phase) {
                         listener.handler(event);
                         break;
                     }
                 }
             }
         };
-        AppView.prototype.registerAnimationOutput = function (element, outputEvent, eventHandler) {
-            var entry = new _AnimationOutputWithHandler(outputEvent, eventHandler);
+        AppView.prototype.registerAnimationOutput = function (element, eventName, eventPhase, eventHandler) {
             var animations = this._animationListeners.get(element);
             if (!isPresent(animations)) {
                 this._animationListeners.set(element, animations = []);
             }
-            animations.push(entry);
+            animations.push(new _AnimationOutputHandler(eventName, eventPhase, eventHandler));
         };
         AppView.prototype.create = function (context, givenProjectableNodes, rootSelectorOrNode) {
             this.context = context;
@@ -9705,18 +9629,18 @@
         }
         return lastNode;
     }
-    var _AnimationOutputWithHandler = (function () {
-        function _AnimationOutputWithHandler(output, handler) {
-            this.output = output;
+    var _AnimationOutputHandler = (function () {
+        function _AnimationOutputHandler(eventName, eventPhase, handler) {
+            this.eventName = eventName;
+            this.eventPhase = eventPhase;
             this.handler = handler;
         }
-        return _AnimationOutputWithHandler;
+        return _AnimationOutputHandler;
     }());
 
     var __core_private__ = {
         isDefaultChangeDetectionStrategy: isDefaultChangeDetectionStrategy,
         ChangeDetectorStatus: ChangeDetectorStatus,
-        CHANGE_DETECTION_STRATEGY_VALUES: CHANGE_DETECTION_STRATEGY_VALUES,
         constructDependencies: constructDependencies,
         LifecycleHooks: LifecycleHooks,
         LIFECYCLE_HOOKS_VALUES: LIFECYCLE_HOOKS_VALUES,
@@ -9733,7 +9657,6 @@
         flattenNestedViewRenderNodes: flattenNestedViewRenderNodes,
         interpolate: interpolate,
         ViewUtils: ViewUtils,
-        VIEW_ENCAPSULATION_VALUES: VIEW_ENCAPSULATION_VALUES,
         ViewMetadata: ViewMetadata,
         DebugContext: DebugContext,
         StaticNodeDebugInfo: StaticNodeDebugInfo,
@@ -9773,7 +9696,6 @@
         renderStyles: renderStyles,
         collectAndResolveStyles: collectAndResolveStyles,
         AnimationStyles: AnimationStyles,
-        AnimationOutput: AnimationOutput,
         ANY_STATE: ANY_STATE,
         DEFAULT_STATE: DEFAULT_STATE,
         EMPTY_STATE: EMPTY_STATE,

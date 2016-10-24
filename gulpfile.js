@@ -50,6 +50,17 @@ gulp.task("copy-lib-scripts",function(){
 	// prettify.css
 	gulp.src("node_modules/google-code-prettify/bin/prettify.min.css")
 	.pipe(gulp.dest("dist/client/css/libs/google-code-prettify"));
+
+// moment.js
+	gulp.src("node_modules/moment/min/moment.min.js")
+	.pipe(gulp.dest("dist/client/scripts/libs/moment"));
+
+// bootstrapv3 datetimepicker.js
+	gulp.src("node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css")
+	.pipe(gulp.dest("dist/client/css/libs/eonasdan-bootstrap-datetimepicker"));
+		gulp.src("node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js")
+	.pipe(gulp.dest("dist/client/scripts/libs/eonasdan-bootstrap-datetimepicker"));
+
 })
 
 gulp.task("copy-lib-css",function(){

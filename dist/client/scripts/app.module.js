@@ -17,6 +17,7 @@ var query_builder_component_1 = require('./query-builder.component');
 var layout_component_1 = require('./layout.component');
 var google_code_prettify_json_component_1 = require('./google-code-prettify-json.component');
 var data_grid_component_1 = require('./data-grid.component');
+var datetime_picker_component_1 = require('./datetime-picker.component');
 // Add the RxJS Observable operators we need in this app
 require('./rxjs-operators');
 var AppModule = (function () {
@@ -34,7 +35,8 @@ var AppModule = (function () {
                 layout_component_1.LayoutComponent,
                 query_builder_component_1.QueryBuilderComponent,
                 google_code_prettify_json_component_1.GoogleCodePrettifyForJsonComponent,
-                data_grid_component_1.DataGridComponent
+                data_grid_component_1.DataGridComponent,
+                datetime_picker_component_1.DatetimePickerComponent
             ],
             providers: [
                 app_routing_1.appRoutingProviders
